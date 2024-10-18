@@ -64,3 +64,40 @@ default:
 }
 
 }
+
+// package main
+
+// import(
+// 	"fmt"
+// )
+
+// type Marks struct{
+// 	x,y int32
+// }
+
+// func (m Marks) Total() int32{
+// 	return m.x+m.y
+// }
+
+// func main(){
+
+// 	var m,n int32
+// 	fmt.Scan(&m,&n)
+
+// 	Mark := Marks{m,n}
+
+// 	fmt.Println(Mark.Total())
+// }
+
+// package main
+
+// import "fmt"
+
+// func main(){
+// 	var p *int32
+// 	var i int32
+// 	p=&i
+
+// 	fmt.Println(p)
+// 	fmt.Println(i)
+// }
