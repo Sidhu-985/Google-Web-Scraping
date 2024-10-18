@@ -1,32 +1,66 @@
 package main
 
-import (
-	"errors"
-	"fmt"
-)
+import "fmt"
 
-func main(){
-
-	var m int = 3
-	var n int = 4
-
-	var result ,remainder,error = divide(m,n)
-
-	if (error!=nil){
-		fmt.Printf(error.Error())
-	}
-
-	fmt.Printf("The result of integer after dividing is %v and remainder = %v",result,remainder)
+type point struct{
+	x,y int
 }
 
-func divide(num1 int,num2 int) (int,int,error){
-	var result int = num1/num2
-	var err error
+func main() {
+// 	intArr := [...]int32{1,2,3}
+// 	fmt.Println(intArr)
 
-	if (num2==0){
-		err = errors.New("divided by zero not possible")
-	}
+// 	var intSlice []int32 = []int32{2,3,4}
+// 	intSlice = append(intSlice,5)
+// 	fmt.Printf("The length is %v and capacity = %v\n",len(intSlice),cap(intSlice))
 
-	var remainder int = num1%num2
-	return result,remainder,err
+// 	var myMap2 = map[string]int64{"Sidhu":23,"Sfu":231}
+// 	fmt.Println(myMap2["Sidhu"])
+
+// 	var num,ok = myMap2["Sfu"]
+
+// 	if ok{
+// 		fmt.Println(num)
+// 	}
+
+// 	for name,age := range myMap2{
+// 		fmt.Printf("Name: %v, Age: %v\n",name,age)
+// 	}
+
+// 	for i,number:= range intArr{
+// 		fmt.Printf("Index: %v, Number:%v\n",i,number)
+// 	}
+
+// 	for s:=0;s<len(myMap2);s++{
+// 		fmt.Println(s)
+// 	}
+// 
+
+//   var myString = "rèsumè"
+//   var indexed = myString[0]
+
+//   fmt.Printf("%v,%T\n",indexed,indexed)
+
+//   for i,v := range myString{
+// 	fmt.Println(i,v)
+//   }
+
+//   p:=point(1)
+
+//   fmt.Println(p)
+
+x := 0
+switch x {
+case 0:
+	fmt.Println(69)
+case 1, 2:
+    fmt.Println("Multiple matches")
+case 42:   // Don't "fall through".
+    fmt.Println("reached")
+case 43:
+    fmt.Println("Unreached")
+default:
+    fmt.Println("Optional")
+}
+
 }
