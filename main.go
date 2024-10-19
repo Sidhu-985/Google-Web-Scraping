@@ -1,66 +1,39 @@
 package main
 
-import "fmt"
-
-type point struct{
-	x,y int
-}
+import (
+	"fmt"
+	"time"
+	"github.com/gocolly/colly"
+)
 
 func main() {
-// 	intArr := [...]int32{1,2,3}
-// 	fmt.Println(intArr)
+    c := colly.NewCollector()
 
-// 	var intSlice []int32 = []int32{2,3,4}
-// 	intSlice = append(intSlice,5)
-// 	fmt.Printf("The length is %v and capacity = %v\n",len(intSlice),cap(intSlice))
+    var input string
+    fmt.Println("Enter the input:")
+    fmt.Scan(&input)
 
-// 	var myMap2 = map[string]int64{"Sidhu":23,"Sfu":231}
-// 	fmt.Println(myMap2["Sidhu"])
+    c.OnHTML("a[href]",func(h *colly.HTMLElement) {
+        fmt.Println(h.Text)
+        time.Sleep(time.Duration(1000)*time.Millisecond)
+    })
 
-// 	var num,ok = myMap2["Sfu"]
+    c.OnRequest(func(r *colly.Request) {
+        r.Headers.Set("Accept-Language","en-US;q=0.9")
+        fmt.Println("Visiting: ",r.URL)
+    })
 
-// 	if ok{
-// 		fmt.Println(num)
-// 	}
+    c.OnError(func(r *colly.Response, err error) {
+        if err!=nil{
+            fmt.Println("No Error Occured")
+        }else{
+            fmt.Println(err)
+        }
+    })
 
-// 	for name,age := range myMap2{
-// 		fmt.Printf("Name: %v, Age: %v\n",name,age)
-// 	}
+    c.OnScraped(func(r *colly.Response) {
+        fmt.Println(r.StatusCode)
+    })
 
-// 	for i,number:= range intArr{
-// 		fmt.Printf("Index: %v, Number:%v\n",i,number)
-// 	}
-
-// 	for s:=0;s<len(myMap2);s++{
-// 		fmt.Println(s)
-// 	}
-// 
-
-//   var myString = "rèsumè"
-//   var indexed = myString[0]
-
-//   fmt.Printf("%v,%T\n",indexed,indexed)
-
-//   for i,v := range myString{
-// 	fmt.Println(i,v)
-//   }
-
-//   p:=point(1)
-
-//   fmt.Println(p)
-
-x := 0
-switch x {
-case 0:
-	fmt.Println(69)
-case 1, 2:
-    fmt.Println("Multiple matches")
-case 42:   // Don't "fall through".
-    fmt.Println("reached")
-case 43:
-    fmt.Println("Unreached")
-default:
-    fmt.Println("Optional")
-}
-
+    c.Visit("https://www.google.com/")
 }
