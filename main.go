@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+    
     c := colly.NewCollector()
 
     var input string
@@ -15,7 +16,7 @@ func main() {
 
     c.OnHTML("a[href]",func(h *colly.HTMLElement) {
         fmt.Println(h.Text)
-        time.Sleep(time.Duration(1000)*time.Millisecond)
+        time.Sleep(1000*time.Millisecond)
     })
 
     c.OnRequest(func(r *colly.Request) {
