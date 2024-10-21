@@ -10,7 +10,7 @@ import (
 func main() {
 	c := colly.NewCollector(
 		colly.AllowedDomains("www.google.com"),
-		colly.UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"),
+		colly.UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.125 Safari/537.36"),
 	)
 
 	var searchQuery string
@@ -28,15 +28,17 @@ func GoogleScrape(c *colly.Collector, searchQ string) {
     i:=1
 	c.OnHTML("div.yuRUbf a", func(h *colly.HTMLElement) {
 		
-		title := h.DOM.Find("h3").Text()
+		result := h.DOM.Find("h3").Text()
         link := h.Attr("href")
     
-		fmt.Printf("%d.Title: %s\n",i,title)
+		fmt.Println("=================")
+		fmt.Printf("%d.Result: %s\n",i,result)
         fmt.Println("Link:",link)
-        fmt.Println()
+        fmt.Println("=================")
+		fmt.Println()
         i++
 
-        time.Sleep(time.Duration(100)*time.Millisecond)
+        time.Sleep(time.Duration(500)*time.Millisecond)
 	})
 
 	c.OnRequest(func(r *colly.Request) {
