@@ -2,47 +2,55 @@ package main
 
 import (
 	"fmt"
+	"net/url"
 	"time"
 	"github.com/gocolly/colly"
 )
 
-func main(){
-    c:=colly.NewCollector()
+func main() {
+	c := colly.NewCollector(
+		colly.AllowedDomains("www.google.com"),
+		colly.UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"),
+	)
 
-    var searchQuery string
-    fmt.Println("Enter the input:")
-    fmt.Scan(&searchQuery)
+	var searchQuery string
+	fmt.Println("Enter the search query:")
+	fmt.Scanln(&searchQuery)
 
-    GoogleScrape(c,searchQuery)
+	searchQuery = url.QueryEscape(searchQuery)
+
+	GoogleScrape(c, searchQuery)
 }
 
-func GoogleScrape(c *colly.Collector,searchQ string){
-    c.SetRequestTimeout(time.Second*100)
+func GoogleScrape(c *colly.Collector, searchQ string) {
+	c.SetRequestTimeout(100 * time.Second)
 
-    c.OnHTML("div.a4bIc div.YacQ span",func(h *colly.HTMLElement) {
-    })
+    i:=1
+	c.OnHTML("div.yuRUbf a", func(h *colly.HTMLElement) {
+		
+		title := h.DOM.Find("h3").Text()
+        link := h.Attr("href")
+    
+		fmt.Printf("%d.Title: %s\n",i,title)
+        fmt.Println("Link:",link)
+        fmt.Println()
+        i++
 
-    c.OnHTML("li.sbct.PZPZIf",func(h *colly.HTMLElement) {
-        result := h.ChildText(".wM6W7d span")
-        fmt.Println(result)
-    })
+        time.Sleep(time.Duration(100)*time.Millisecond)
+	})
 
-    c.OnRequest(func(r *colly.Request) {
-        fmt.Println("Visiting:",r.URL.String())
-        fmt.Println("Top 10 results")
-    })
+	c.OnRequest(func(r *colly.Request) {
+		fmt.Println("Visiting:", r.URL)
+		fmt.Println("Top 10 results:")
+	})
 
-    c.OnError(func(r *colly.Response, err error) {
-        fmt.Println("Error: ",err.Error())
-    })
+	c.OnError(func(r *colly.Response, err error) {
+		fmt.Println("Error:", err.Error())
+	})
 
-    c.OnResponse(func(r *colly.Response) {
-        
-    })
+	c.OnScraped(func(r *colly.Response) {
+		fmt.Println("Finished Scraping.\nStatus Code:", r.StatusCode)
+	})
 
-    c.OnScraped(func(r *colly.Response) {
-        fmt.Println("Finished Scraping\nStatus Code:",r.StatusCode)
-    })
-
-    c.Visit("https://www.google.com/")
+	c.Visit("https://www.google.com/search?q="+searchQ)
 }
