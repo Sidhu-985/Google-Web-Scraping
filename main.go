@@ -25,20 +25,30 @@ func main() {
 func GoogleScrape(c *colly.Collector, searchQ string) {
 	c.SetRequestTimeout(100 * time.Second)
 
-    i:=1
+	i:=1
 	c.OnHTML("div.yuRUbf a", func(h *colly.HTMLElement) {
-		
-		result := h.DOM.Find("h3").Text()
-        link := h.Attr("href")
-    
-		fmt.Println("=================")
-		fmt.Printf("%d.Result: %s\n",i,result)
-        fmt.Println("Link:",link)
-        fmt.Println("=================")
-		fmt.Println()
-        i++
+		if i>10 {
+			return
+		}
 
-        time.Sleep(time.Duration(500)*time.Millisecond)
+		result := h.DOM.Find("h3").Text()
+		link := h.Attr("href")
+
+		fmt.Println("===================================")
+		fmt.Printf("%d. Result: %s\n",i,result)
+		fmt.Println("Link:", link)
+		fmt.Println("===================================")
+		fmt.Println()
+		i++
+
+		time.Sleep(time.Duration(500) * time.Millisecond)
+	})
+
+	c.OnHTML("a#pnnext", func(h *colly.HTMLElement) {
+		if i<11 {
+			nextPage := h.Attr("href")
+			c.Visit("https://www.google.com"+nextPage)
+		}
 	})
 
 	c.OnRequest(func(r *colly.Request) {
@@ -54,5 +64,5 @@ func GoogleScrape(c *colly.Collector, searchQ string) {
 		fmt.Println("Finished Scraping.\nStatus Code:", r.StatusCode)
 	})
 
-	c.Visit("https://www.google.com/search?q="+searchQ)
+	c.Visit("https://www.google.com/search?q=" + searchQ)
 }
