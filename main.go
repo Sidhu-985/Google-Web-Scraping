@@ -26,6 +26,7 @@ func GoogleScrape(c *colly.Collector, searchQ string) {
 	c.SetRequestTimeout(100 * time.Second)
 
 	i:=1
+	fmt.Println("Top 10 results:")
 	c.OnHTML("div.yuRUbf a", func(h *colly.HTMLElement) {
 		if i>10 {
 			return
@@ -40,7 +41,7 @@ func GoogleScrape(c *colly.Collector, searchQ string) {
 		fmt.Println("===================================")
 		fmt.Println()
 		i++
-
+		
 		time.Sleep(time.Duration(500) * time.Millisecond)
 	})
 
@@ -53,7 +54,6 @@ func GoogleScrape(c *colly.Collector, searchQ string) {
 
 	c.OnRequest(func(r *colly.Request) {
 		fmt.Println("Visiting:", r.URL)
-		fmt.Println("Top 10 results:")
 	})
 
 	c.OnError(func(r *colly.Response, err error) {
