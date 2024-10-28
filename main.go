@@ -22,6 +22,7 @@ func main() {
 	GoogleScrape(c, searchQuery)
 }
 
+
 func GoogleScrape(c *colly.Collector, searchQ string) {
 	c.SetRequestTimeout(100 * time.Second)
 
@@ -45,10 +46,10 @@ func GoogleScrape(c *colly.Collector, searchQ string) {
 		time.Sleep(time.Duration(500) * time.Millisecond)
 	})
 
-	c.OnHTML("a#pnnext", func(h *colly.HTMLElement) {
+	c.OnHTML("#pnnext", func(h *colly.HTMLElement) {
 		if i<11 {
-			nextPage := h.Attr("href")
-			c.Visit("https://www.google.com"+nextPage)
+			nextPageLink := h.Attr("href")
+			c.Visit("https://www.google.com"+nextPageLink)
 		}
 	})
 
@@ -66,3 +67,4 @@ func GoogleScrape(c *colly.Collector, searchQ string) {
 
 	c.Visit("https://www.google.com/search?q=" + searchQ)
 }
+
