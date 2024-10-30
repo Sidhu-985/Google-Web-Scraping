@@ -5,6 +5,9 @@ import (
 	"net/url"
 	"time"
 	"github.com/gocolly/colly"
+	"strings"
+	"bufio"
+	"os"
 )
 
 func main() {
@@ -13,11 +16,14 @@ func main() {
 		colly.UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.125 Safari/537.36"),
 	)
 
-	var searchQuery string
-	fmt.Println("Enter the search query:")
-	fmt.Scanln(&searchQuery)
+	reader := bufio.NewReader(os.Stdin)
 
-	searchQuery = url.QueryEscape(searchQuery)
+	fmt.Println("Enter the search input:")
+	input,_:=reader.ReadString('\n')
+
+	searchQuerys := strings.Fields(strings.TrimSpace(input))
+
+	searchQuery:= url.QueryEscape(strings.Join(searchQuerys,""))
 
 	GoogleScrape(c, searchQuery)
 }
